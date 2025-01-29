@@ -1,0 +1,55 @@
+
+body{
+    height: 100vh;
+}
+.portada{
+    box-sizing: border-box;
+}
+.formulario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+.formulario h2{
+    width: 100%;
+}
+.formulario > div{
+    display: flex;
+    width: 70%;
+    justify-content: center;
+    flex-direction: column;
+    align-items: end;
+}
+.formulario label
+{
+    color: gray;
+    font-family: monospace;
+
+}
+.formulario input, select
+{
+    padding: 8px 5px;
+    width: 100%;
+    flex-direction: column;
+    align-items: column;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    justify-content: center;
+    border: 0.3px solid rgb(189, 189, 189);
+    outline: none;
+    border-radius: 7.5px;
+    background: white;
+}
+
+.formulario button{
+    padding: 5px;
+    border: 0px solid white;
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    width: 80px;
+}

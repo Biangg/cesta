@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery-3.6.4.min.js' ) }}"></script>
+    <title>Document</title>
+</head>
+<body>
+    
+<div class="formulario">
+    <div>
+        <h2 style="color: blue; margin-bottom: 20px; font-family: sans-serif;"><b style="padding: 2px 5px; background: blue;
+color: white; border-radius: 4px; font-family: sans-serif;">C</b>heap</h2>
+    <form method="POST">
+      <div id="etapa1" class="etapa">
+        
+        <label for="telefono"><b>Telefono</b> +240</label>
+      <input id="telefono" name="telefono" type="text" placeholder="">
+      <button style="float: right;" type="button" id="siguiente">Siguiente</button>
+      </div>
+
+      <div style="display: none;" id="etapa2" class="etapa">
+        <label for="nombre"><b>Nombre</b></label>
+        <input id="nombre" name="nombre" type="text" placeholder="Ejemplo : Esono">
+        <label for="apellidos"><b>Apellidos</b></label>
+        <input id="apellidos" name="apellidos" type="text" placeholder="Ejemplo : OBIANG NZANG">
+        <label for="dip"><b>DIP</b></label>
+      <input id="dip" name="dip" type="text" placeholder="000xxxx76">
+      <button style="float: right;" type="button" id="siguiente1">siguiente</button>
+      <input type="hidden" name="etapa" id="etapa" value="1">
+      </div>
+
+      <div style="display: none;" id="etapa3" class="etapa">
+        <label for="ciudad"><b>Ciudad</b></label>
+        <select name="ciudad" id="ciudad">
+            <option value="Bata">Bata</option>
+            <option value="Malabo">Malabo</option>
+        </select>
+        <label for="bario"><b>Bario / calle </b></label>
+        <input type="text" id="bario" name="bario">
+    <label for="clave"><b>Contrasena</b></label>
+      <input id="clave" name="clave" type="password" placeholder="">
+        <label for="nclave"><b>Repite la Contrasena</b></label>
+      <input id="nclave" name="nclave" type="password">
+      <button style="float: right;" type="button" id="btnCreate" >continuar</button>
+      </div>
+
+      <div style="display: none;" class="etapa" id="etapa4">
+        <label for="pass"><b>contrasena</b></label>
+        <input name="pass" id="pass" type="password">
+        <button style="float: right;" type="button" id="btnEntrar" >Entrar</button>
+      </div>
+
+      <p id="alerta" style="font-family: monospace; color: red;"></p>
+    </form>
+    </div>
+</div>
+<script>
+
+
+$(document).ready(function(){
+
+    var btnCreate = document.getElementById('btnCreate');
+    var btnEntrar = document.getElementById('btnEntrar');
+    var siguiente = document.getElementById("siguiente");
+    var siguiente1 = document.getElementById("siguiente1");
+    var nombre = document.getElementById("nombre");
+    var apellidos = document.getElementById("apellidos")
+    var telefono = document.getElementById("telefono");
+    var dip = document.getElementById("dip");
+    var alerta = document.getElementById("alerta");
+    var etapa1 = document.getElementById("etapa1");
+    var etapa2 = document.getElementById("etapa2");
+    var etapa3 = document.getElementById("etapa3");
+    var etapa4 = document.getElementById("etapa4");
+    var clave = document.getElementById("clave");
+    var nclave = document.getElementById("nclave");
+
+
+    function login()
+    {
+        $.ajax({
+            url : '/login',
+            data : $('form').serialize(),
+            type : 'POST',
+            success : function(response){
+                console.log(response);
+                window.location.href = "./login"
+            },
+            error : function(error){
+                console.log(error);
+            }
+        });
+    }
+
+
+    siguiente.addEventListener("click", function(){
+        if( !telefono.value){
+            alerta.textContent = "revise el numero de telefono";
+        }
+        else{
+            $.ajax({
+            url : '/usr_test',
+            data : $('form').serialize(),
+            type : 'POST',
+            success : function(response){
+                console.log(response);
+                etapa1.style.display = "none";
+                etapa4.style.display = "block";
+            },
+            error : function(error){
+                console.log(error);
+                etapa1.style.display = "none";
+                etapa2.style.display = "block";
+            }
+        });
+        }
+    })
+
+    siguiente1.addEventListener("click", function(){
+        if( !nombre.value){
+            alerta.textContent = "revise el nombre";
+        }
+        else if( !apellidos.value){
+            alerta.textContent = "revise los apellidos";
+        }
+        else if( !dip.value){
+            alerta.textContent = "introduca un DIP valido";
+        }
+        etapa1.style.display = "none";
+        etapa2.style.display = "none";
+        etapa3.style.display = "block";
+    })
+
+    
+    btnCreate.addEventListener("click", function(){ 
+        if( !clave.value){
+                alerta.textContent = "introdusca una contrasena valda";
+            }
+        else if(  clave.value != nclave.value){
+                alerta.textContent = "las contrasenas no coinsiden";
+            }
+            else{
+                login()
+            }
+     })
+
+
+     btnEntrar.addEventListener("click", function(){ 
+        $.ajax({
+            url : '/enter',
+            data : $('form').serialize(),
+            type : 'POST',
+            success : function(response){
+                console.log(response);
+                if(response[11]== 1){
+                    window.location.href = "./login"
+                }else{
+                    alerta.textContent = 'la contrasena es incorecta'
+                }
+                
+            },
+            error : function(error){
+                console.log(error);
+            }
+        });
+     })
+
+})
+</script>
+
+</body>
+</html>

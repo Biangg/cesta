@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/facturas.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Compras</h1>
+    <p style="font-family: monospace;">
+        {% for i in facturas['id_producto'] %}
+            <div class="factura">
+                <h4>{{ facturas['fecha_pedido'][i-1] }}</h4>
+                <p>{{ facturas['nombre'][i-1] }} <b style="background-color: rgb(202, 202, 202); box-sizing: border-box;
+                border: 5px; padding: 2px 8px; border-radius: 5px; margin-left: 20px;">{{ facturas['estado'][i-1] }}</b> </p>
+                <p>precio : {{ facturas['precio'][i-1] }}xaf</p>
+                <p>clave : K-P{{facturas['id_pedido'][i-1] }}U{{facturas['id_cliente'][i-1]}}</p>
+            </div>
+        {% endfor %}
+    </p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/yo.css') }}">
+    <title>yo</title>
+</head>
+<body>
+     <div class="f1">
+        <div class="foto"></div>
+        <h3><b>{{ yo['nombre'][0] }} {{ yo['apellidos'][0] }}</b></h3>
+        <p>+240 {{ yo['telefono'][0] }}</p>
+     </div>
+
+     <div class="f">
+        <p><b>Nombre</b></p>
+        <p>{{ yo['nombre'][0] }}</p><br>
+        <p><b>Apellidos</b></p>
+        <p>{{ yo['apellidos'][0] }}</p><br>
+        <p><b>Telefono</b></p>
+        <p>+240 {{ yo['telefono'][0] }}</p>
+     </div>
+
+     <div class="f">
+        <p><b>Ciudad</b></p>
+        <p>{{ yo['ciudad'][0] }}</p><br>
+        <p><b>calle</b></p>
+        <p>{{ yo['bario'][0] }}</p>
+     </div>
+
+ 
+</body>
+</html>

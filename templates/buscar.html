@@ -1,0 +1,122 @@
+
+{% extends "base.html" %}
+{% block title %} {% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buscar.css') }}">
+
+<div class="contenido">
+    <div class="superior">
+        <div style="width: 90%; box-sizing: border-box; 
+        padding: 3px 20px;"><form >
+            <input name="dato" style="width: 95%; padding: 15px; outline: none;
+            border-radius: 17px; border: 0px solid white; background-color: rgb(231, 231, 231);
+            color: black;" placeholder="buscar productos y categorias" type="text" 
+            id="buscardor">
+        </form></div>
+        <div id="btnPerfil" style="padding: 13px; cursor: pointer; background-repeat: no-repeat; border: 1px solid black;
+         border-radius: 100%; margin: 0px 5px; background: url(/static/images/yo.png); background-size: 100%;"></div>
+    </div>
+</div>
+<div class="centro">
+    <div id="cate" class="categorias">
+        <p style="margin-bottom: 10px;"><b style="color: gray;">categorias</b></p>
+        <div style="column-count: 2; column-gap: 10px;"  class="cate" id="cate_">
+            {% for i in categoria%}
+            <div class="{{i}}" id="{{i}}">{{i}}</div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="resultado" class="resultado">
+
+    </div>
+</div>
+    
+<script>
+
+    (function(){
+        var resultado = document.getElementById("resultado");
+        var buscardor = document.getElementById("buscardor");
+        var cate = document.getElementById("cate");
+        var cate_ = document.getElementById("cate_");
+
+        for( i = 0; i < cate_.children.length ; i++){
+            cate_.children[i].addEventListener("click", function(){
+                buscardor.value = this.id
+                $.ajax({
+                    url : '/f',
+                    data : $('form').serialize(),
+                    type : 'POST',
+                    success : function(response){
+                        actualizar(response);
+                    },
+                    error : function(error){
+                        console.log(error);
+                    }
+                });
+            })
+        }
+
+        function actualizar(dato){
+            console.log(dato.length)
+            resultado.innerHTML = ''
+            cate.style.display = "none"
+
+            for(i = 0; i < dato.length; i++){
+                targeta = document.createElement('div');
+                portada = document.createElement('div');
+                datos   = document.createElement('div')
+                titulo  = document.createElement('h3');
+                precio  = document.createElement('p')
+                ver     = document.createElement('button');
+
+
+                ver.textContent = 'ver articulo'
+                ver.className = 'btn_ver'
+                ver.id = 'btn_ver'
+                portada.className = 'portada'
+                portada.style.height = portada.style.width
+                targeta.className = 'targeta'
+                targeta.id = i
+                portada.innerHTML = '<img src="../static/img/' + dato[i].imagen + '?">'
+                titulo.textContent = dato[i].nombre
+                precio.textContent = dato[i].precio + " xaf"
+                elemento = dato[i].id_producto
+
+
+                resultado.appendChild(targeta)
+                targeta.appendChild(portada)
+                targeta.appendChild(datos)
+                datos.appendChild(titulo)
+                datos.appendChild(precio)
+                datos.appendChild(ver)
+
+                targeta.addEventListener("click", function(){
+                    window.location.href = "./buscar/" + this.id 
+                })
+
+            }
+        }
+
+        buscardor.addEventListener("input", function(){
+            $.ajax({
+                    url : '/buscar',
+                    data : $('form').serialize(),
+                    type : 'POST',
+                    success : function(response){
+                        actualizar(response);
+                    },
+                    error : function(error){
+                        console.log(error);
+                    }
+                });
+         })
+
+         btnCerrarPerfil.addEventListener("click", function(){
+        perfil.style.display = "none"
+    })
+    }
+    
+    ())
+</script>
+{% endblock %}

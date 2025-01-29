@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery-3.6.4.min.js' ) }}"></script>
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+    <div class="mensage" id="mensage"><p></p></div>
+
+    <div id="perfil" class="perfil" style="box-shadow: 0px 0px 12px 3px gray; width: 80;">
+        <div style="display: flex;">
+            <button style="padding: 0px 8px; border-radius: 100%; margin-bottom: 10px; 
+        color: black; border: 0px solid white; cursor: pointer; font-size: 24px;
+        background: none;" id="btnCerrarPerfil"><b>x</b></button> <p style="text-align: center;
+        width: 90%; font-family: sans-serif; color: rgba(102, 51, 153, 0.13); margin-top: 7px;
+        "><b>power by Biangg</b></p>
+        </div>
+        <div class="zonaBlanca">
+            <div class="f1" style="margin-bottom: 20px;">
+                <div>
+                    <div class="foto" style=" padding: 20px; background-image: url('../static/images/yo.png');
+                border-radius: 100%; background-size: 100%; border: 1px solid black;"></div>
+                </div>
+                <div style="width: 80%; margin: 0px 10px;">
+                    <p><b style="font-size: 12px;">{{ yo['nombre'][0] }} {{ yo['apellidos'][0] }}</b></p>
+                    <p style="font-family: monospace;">+240 {{ yo['telefono'][0] }}</p>
+                </div>
+            </div>
+            <a href="/yo">
+                <button style="background-color: white; padding: 2px 8px; cursor: pointer;
+            border: 1.5px solid gray; border-radius: 8px; margin-left: 15%;
+            margin-bottom: 10px;" >Gestionar mi cuenta</button>
+            </a>
+            <hr style="color: rgb(235, 235, 235);">
+            <a href="/facturas" style="color: black;"><p style="font-size: 12px; margin: 25px 0px;">Gestion de compras y facturas</p></a>
+            <p style="font-size: 12px; margin: 25px 0px;">notificaciones y ofertas</p>
+            <p style="font-size: 12px; margin: 25px 0px;">metodos de pago y creditos</p>
+        </div>
+        <div style="padding: 10px;">
+            <p style="font-size: 12px; margin: 15px 0px;">Ajustes</p>
+            <p style="font-size: 12px; margin: 15px 0px;">Ayuda y comentarios</p>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+    <div class="inferior">
+        <a href="/index">
+            <button
+        style="background-image: url(../static/images/home.png);"></button>
+        </a>  
+        <a href="/carro">
+            <button
+        style="background-image: url(../static/images/carro.png);"></button>
+        </a>
+        <a href="/buscar"><button style="background-image: url(../static/images/buscar.png);"></button></a>
+    </div>
+</body>
+<script>
+    var btnPerfil = document.getElementById("btnPerfil");
+    var perfil = document.getElementById("perfil");
+    var mensage = document.getElementById("mensage");
+    var btnCerrarPerfil = document.getElementById("btnCerrarPerfil");
+    var pagOk   = document.getElementById("pagOk");
+    var efectuado = document.getElementById("efectuado");
+
+
+    btnPerfil.addEventListener("click", function(){
+        perfil.style.display = "block"
+    })
+
+    pagOk.addEventListener("click", function(){
+        efectuado.style.display = "none"
+    })
+
+    mensage.addEventListener("dragover", function(){
+        mensage.style.top = "-20px"
+    })
+</script>
+</html>

@@ -1,0 +1,127 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/carro.css') }}">
+    
+    <div class="f" id="f">
+        <div class="flotante">
+            <div style="display: flex; justify-content: center;">
+                <div class="portada"></div>
+            </div>
+            <h2 style="text-align: center; margin: 10px 0px;">Carro </h2>
+            <p>precio total : <b>{{ total }} xaf</b></p>
+            <p>envio : 8000 xaf</p>
+            <div style="display: flex; flex-direction: column; margin-top: 20px;
+                    justify-content: center; align-items: center;">
+            <label for="pip">Introdusca su numero de DIP/DNI</label>
+            <input id="dip" type="text">
+        </div>
+        <p style="font-family: monospace;">El paquete llegara antes de 3 horas
+            despues de efectuar la compra.</p>
+            <button style="background-color: green; color: white;" id="efectuar">ok, Gracias</button>
+            <button style="background-color: red; color: white;" id="cancelar">cancelar</button>
+        </div>
+    </div>
+
+    <div class="contenido">
+        <div class="superior">
+            <div><h3 style="font-size: 22px;">Total </h3><p style="color: gray; font-size: 11px;">{{total}} xaf </p> </div>
+            <div >
+                
+                <button style="font-size: 11px; border-radius: 4px; padding: 3px 6px; background: green; color: white;" id="btn_comprar">comprar</button>
+            </div>
+        </div>
+
+        <div class="centro">
+            <div id="c" class="c">
+                {% for i in range(productos.shape[0]) %}
+                    <div class="targeta">
+                            <div class="portada"></div>
+                        <div class="tg_inf">
+                            <h4>{{ productos['nombre'][i] }} : {{productos['precio'][i]}} xaf</h4>
+                            <p>envio : 2000 xaf</p>
+                            <button id="btn_descartar"><b>descartar</b></button>
+                            <p style="display: none;">{{productos['id_producto'][i]}}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="formulario">
+            <form >
+                <input type="text" name="estado" id="estado">
+                <input type="text" id="id_producto" name="id_producto" class="id_producto">
+                <input type="text" id="id_usuario" name="id_usuario" class="id_usuario">
+            </form>
+        </div>
+    </div>
+    
+
+    <script>
+        (function(){
+
+            var c = document.getElementById("c");
+            var dip = document.getElementById("dip");
+            var f = document.getElementById("f");
+            var cancelar = document.getElementById("cancelar");
+            var efectuar = document.getElementById("efectuar"); 
+            var btn_comprar = document.getElementById("btn_comprar")
+
+            for(y = 0; y < c.children.length; y++)
+        {
+            c.children[y].children[1].children[2].addEventListener("click", function(){
+                estado = document.getElementById("estado")
+                id_producto = document.getElementById("id_producto")
+                estado.value = 'eliminar'
+                this.parentElement.parentElement.style.display = "none"
+                id_producto.value = this.parentElement.children[3].textContent
+                $.ajax({
+                    url : '/carro',
+                    data : $('form').serialize(),
+                    type : 'POST',
+                    success : function(response){
+                        console.log(response);
+                    },
+                    error : function(error){
+                        console.log(error);
+                    }
+                });
+            })
+        }
+
+        btn_comprar.addEventListener("click", function(){
+            f.style.display = "flex"
+        })
+        cancelar.addEventListener("click", function(){
+            f.style.display = "none"
+        })
+
+        efectuar.addEventListener("click", function(){
+                estado = document.getElementById("estado");
+                id_usuario = document.getElementById("id_usuario");
+                estado.value = 'efectuar';
+                id_usuario.value = "{{yo['id_usuario'][0]}}";
+                if(dip.value == '{{yo["dip"][0]}}'){
+                    $.ajax({
+                    url : '/carro',
+                    data : $('form').serialize(),
+                    type : 'POST',
+                    success : function(response){
+                        console.log(response);
+                        window.location.reload()
+                    },
+                    error : function(error){
+                        console.log(error);
+                    }
+                });
+                }else{
+                    alert("El DIP introducido es incorecto")
+                }
+        })
+        
+            
+        }())
+    </script>
+    
+{% endblock %}

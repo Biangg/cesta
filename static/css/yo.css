@@ -1,0 +1,32 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+
+.f1{
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.f1 .foto{
+    background: url(/static/images/yo.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    padding: 60px;
+    width: 0px;
+    border-radius: 100%;
+    margin: 20px 0px;
+}
+
+.f{
+    box-sizing: border-box;
+    margin: 20px;
+    padding: 10px;
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+}

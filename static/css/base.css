@@ -1,0 +1,131 @@
+
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+
+body{
+    background-color: rgb(255, 255, 255);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.perfil{
+    position: fixed;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: rgb(233, 233, 233);
+    top: 7vh;
+    width: 90%;
+    border-radius: 10px;
+    z-index: 3;
+    display: none;
+    transition: 500ms;
+}
+.perfil a{
+    text-decoration: none;
+    background: none;
+}
+
+.zonaBlanca{
+    background-color: white;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.f1{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.inferior {
+    bottom: 0px;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0px 0px;
+    width: 100%;
+    background-color: white;
+}
+
+.inferior button, .inferior a{
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 0px 7.5%;
+    cursor: pointer;
+    border: 0px solid white;
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: white;
+}
+.mensage{
+    transition: 600ms;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: rgb(35, 248, 35);
+    position: fixed;
+    top: -20px;
+    z-index: 5;
+}
+.efectuar{
+    display: none;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(75, 75, 75, 0.493);
+    z-index: 5;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+.efectuar > div{
+    width: 80%;
+    box-sizing: border-box;
+    padding: 20px;
+    background: white;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.efectuar .img_pag{
+    box-sizing: border-box;
+    padding: 80px;
+    margin: 20px 0px;
+    background: url(../images/pag.jpg);
+    background-size: 130%;
+    border-radius: 10px;
+    background-position: center;
+}
+.efectuar label{
+    color: gray;
+    font-size: 15px;
+}
+.efectuar input{
+    box-sizing: border-box;
+    padding: 4px 8px;
+    border: 1px solid green;
+    outline: 0px;
+    border-radius: 7.7px;
+    font-family: monospace;
+    margin-top: 3px;
+}
+.efectuar button{
+    padding: 3px 6px;
+    border: 0px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}

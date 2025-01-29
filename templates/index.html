@@ -1,0 +1,168 @@
+
+{% extends "base.html" %}
+{% block title %} {% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    
+    <div class="contenido">
+        <div class="superior">
+            <div style="width: 85%; margin: 0px 10px;"><h3 style="font-size: 22px;"><b style="background: blue;
+            color: white; box-sizing: border-box; padding: 1px 5px; border-radius: 5px;">C</b>heap</h3></div>
+            <div>
+                <div id="btnPerfil" style="padding: 15px; border-radius: 100%; background-image: url(/static/images/yo.png);
+                 cursor: pointer; background-size: 100%; border: 1px solid black;" class="fotoPerfil"></div>
+            </div>
+        </div>
+
+        <div class="centro">
+            <div id="c1" class="c1">
+                {% for i in productos["id_producto"] %}
+                    <div id="targeta" class="targeta">
+                        <div class="tg_opt">
+                            <div class="portada">
+                                <a href="/buscar/{{i-1}}">
+                                    <img src="../static/img/{{ productos['imagen'][i-1] }}" alt="qie ?">
+                                </a>
+                            </div>
+                            <div>
+                                <p style="font-size: 10px; padding: 3px 5px; background: rgb(236, 236, 236);
+                                border-radius: 5px; width: 60px; text-align: center; margin: 3px 0px;"><b>{{categoria[productos['id_categoria'][i-1]]}}</b></p>
+                            </div>
+                            <p style="display: none;">{{ productos["id_producto"][i-1] }}</p>
+                            <h4>{{ productos["nombre"][i-1] }}</h4>
+                            <p
+                            style="font-size: 11px; color: gray;">{{ productos["describcion"][i-1] }}</p>
+                            <p>precio : <b>{{ productos["precio"][i-1]}} </b>xaf</p>
+                        </div>
+                        <div class="tg_inf">
+                            <button
+                            style="background-image: url(../static/images/carro.png);"></button>
+                            <button
+                            style="width: 70%; background-color: green; font-size: 13px;"><b>Comprar</b></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <form id="comprar">
+        <input type="text" id="id_producto" name="id_producto">
+        <input type="text" id="precio" name="precio">
+        <input type="text" id="estado" name="estado">
+    </form>
+
+    <div id="f" class="f">
+        <div id="flotante" class="flotante">
+            <div style="box-sizing: border-box; display: flex; justify-content: center; margin-bottom: 20px;">
+                <div class="paquete"></div>
+            </div>
+            <div class="describ">
+                <h2 style="color: gray; margin-bottom: 5px; text-align: center; width: 100%;"> </h2>
+                <label for="unidades">unidades : </label>
+                <input style="border: 0px solid white; background: white;"
+                type="number" name="unidades" id="unidades" max="5" min="1" value="1">
+                <p
+                style="padding: 5px 10px; box-sizing: border-box; background: rgb(228, 228, 228);
+                font-family: monospace; border-radius: 10px;"></p>
+                <p>precio: <b>0000</b><b>xaf</b></p>
+                <p>envio :  <b>500</b><b>xaf</b> </p>
+                <div style="display: flex; flex-direction: column;
+                            justify-content: center; align-items: center;">
+                    <label for="pip">Introdusca su numero de DIP/DNI</label>
+                    <input id="dip" type="text">
+                </div>
+                <p style="font-family: monospace;">El paquete llegara antes de 3 horas
+                    despues de efectuar la compra.</p>
+                <div style="margin-bottom: 10px; margin-top: 20px; display: flex; justify-content: center;"
+                 class="botones">
+                    <button id="btn_comprar" style="background: green; color: white; margin-right: 10px;">comprar</button>
+                    <button style="background: red; color: white;" id="bcm_inf">cancelar</button>
+                </div>
+                <p style="display: none;"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        var bcm_inf = document.getElementById("bcm_inf");
+        var mensage = document.getElementById("mensage");
+        var flotante = document.getElementById("flotante");
+        var f = document.getElementById("f");
+        var targeta = document.getElementById("targeta");
+        var c1 = document.getElementById("c1");
+        var dip = document.getElementById("dip");
+        var btn_comprar = document.getElementById("btn_comprar");
+        
+        for( x = 0; x < c1.children.length; x++ ){
+            c1.children[x].children[1].children[1].addEventListener("click", function(){
+                
+                flotante.children[1].children[0].textContent = this.parentNode.parentNode.children[0].children[3].textContent
+                flotante.children[1].children[4].children[0].textContent = this.parentNode.parentNode.children[0].children[5].children[0].textContent
+                flotante.children[1].children[3].textContent = this.parentNode.parentNode.children[0].children[4].textContent
+                flotante.children[1].children[9].textContent = this.parentNode.parentNode.children[0].children[2].textContent
+                f.style.display = "flex";
+            })
+
+            c1.children[x].children[1].children[0].addEventListener("click", function(){
+                var id_producto = document.getElementById("id_producto");
+                var precio = document.getElementById("precio");
+                id_producto.value = this.parentElement.parentElement.children[0].children[2].textContent;
+                precio.value = this.parentElement.parentElement.children[0].children[5].textContent;
+
+                $.ajax({
+                    url : '/dcarro',
+                    data : $('form').serialize(),
+                    type : 'POST',
+                    success : function(response){
+                        console.log(response);
+                    },
+                    error : function(error){
+                        console.log(error);
+                    }
+                });
+                this.parentNode.style.display = "none";
+            })
+        }
+
+
+        bcm_inf.addEventListener("click", function(){
+            f.style.display = "none";
+        })
+
+        btn_comprar.addEventListener("click", function(){
+
+            var id_producto = document.getElementById("id_producto");
+            var precio = document.getElementById("precio");
+            var estado = document.getElementById("estado")
+            id_producto.value = this.parentElement.parentElement.children[9].textContent
+            precio.value = this.parentElement.parentElement.children[4].children[0].textContent
+            estado.value = "comprado"
+            if(dip.value == '{{yo["dip"][0]}}'){
+                $.ajax({
+                    url : '/index',
+                    data : $('form').serialize(),
+                    type : 'POST',
+                    success : function(response){
+                        console.log(response);
+                        f.style.display = 'none';
+                        mensage.children[0].textContent = "la compra se ha efectuado corectamente"
+                        mensage.style.display = 'block'
+                        mensage.style.top = '0px'
+                    },
+                    error : function(error){
+                        console.log(error);
+                    }
+                });
+            }else{
+                alert("El DIP introducido es incorecto")
+            }
+        })
+
+        btnCerrarPerfil.addEventListener("click", function(){
+        perfil.style.display = "none"
+    })
+    </script>
+    
+{% endblock %}

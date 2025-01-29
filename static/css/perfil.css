@@ -1,0 +1,83 @@
+
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.superior{
+    box-sizing: border-box;
+    padding: 10px 0px;
+    width: 95%;
+    height: 40px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    top: 0px;
+    background-color: rgb(235, 235, 235);
+}
+.superior h3{
+    color: blue;
+}
+.superior > div{
+    width: 49%;
+}
+
+.contenido{
+    box-sizing: border-box;
+    width: 95%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.contenido .centro {
+    flex-direction: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    height: 95%;
+    margin-top: 45px;
+}
+.centro > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    display: flex;
+}
+.superior > div button{
+    float: right;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+    border: 0px solid white;
+    border-radius: 100%;
+}
+.centro .targeta{
+    width: 100%;
+    background-color: white;
+    box-sizing: border-box;
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0px;
+}
+.img_perfil{
+    width: 90px;
+    height: 90px;
+    background: greenyellow;
+    border-radius: 100%;
+}
+.targeta p{
+    font-size: 13px;
+    color: gray;
+    margin: 5px 0px;
+}
+.targeta hr{
+    color: rgb(235, 235, 235);
+}

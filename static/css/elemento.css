@@ -1,0 +1,41 @@
+
+.superior{
+    position: fixed;
+    z-index: 4;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    width: 100%;
+    
+}
+
+.superior button{
+    border: 0px solid white;
+    background-color: white;
+    padding: 10px;
+    border-radius: 100%;
+}
+.opciones .f1{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.opciones .f{
+    width: 100%;
+    margin: 20px 0px;
+}
+#btn_comprar{
+    box-sizing: border-box;
+    width: 90%;
+    background-color: rgb(9, 167, 9);
+    padding: 15px 0px;
+    border: 0px solid wheat;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 10px;
+    z-index: 4;
+}
+.inferior{
+    display: none;
+}

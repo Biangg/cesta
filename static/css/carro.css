@@ -1,0 +1,169 @@
+
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.superior{
+    box-sizing: border-box;
+    padding: 10px 0px;
+    width: 95%;
+    height: 40px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    top: 0px;
+    background-color: white;
+}
+.superior h3{
+    color: blue;
+}
+.superior > div{
+    width: 49%;
+}
+.superior > div button{
+    float: right;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+    border: 0px solid white;
+    border-radius: 100%;
+}
+.contenido{
+    box-sizing: border-box;
+    width: 95%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.contenido .centro {
+    flex-direction: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    height: 95%;
+    margin-top: 45px;
+}
+.centro > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    display: flex;
+}
+.centro .targeta{
+    width: 90%;
+    background-color: white;
+    box-sizing: border-box;
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0px;
+}
+.targeta .portada {
+    width: 30%;
+    height: 60px;
+    background: darkcyan;
+    border: 0px solid white;
+    border-radius: 5px;
+}
+.targeta .tg_inf{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3px 5px;
+}
+.tg_inf button{
+    box-sizing: border-box;
+    padding: 3px;
+    margin: 0px 2px;
+    font-size: 9px;
+    cursor: pointer;
+    width: 20px;
+    border: 0px solid white;
+    background-color: red;
+    width: 60px;
+    border-radius: 3px;
+    color: white;
+    font-family: monospace;
+
+}
+.inferior {
+    bottom: 0px;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0px 0px;
+    width: 100%;
+    background-color: white;
+}
+
+.inferior button, .inferior a{
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 0px 7.5%;
+    cursor: pointer;
+    border: 0px solid white;
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: white;
+}
+.f{
+    box-sizing: border-box;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 100vh;
+    background: rgba(116, 116, 116, 0.432);
+    z-index: 5;
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.f .flotante{
+    width: 80%;
+    box-sizing: border-box;
+    padding: 20px 40px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 6px 1px gray;
+}
+.flotante p{
+    margin: 10px 0px;
+}
+.flotante button{
+    margin: 0px 5px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    border: 0px solid white;
+    border-radius: 5px;
+}
+.flotante .portada{
+    box-sizing: border-box;
+    padding: 80px;
+    border-radius: 10px;
+    background-color: green;
+}
+.f .flotante label{
+    color: gray;
+    font-size: 15px;
+}
+.f .flotante input{
+    box-sizing: border-box;
+    padding: 4px 8px;
+    border: 1px solid green;
+    outline: 0px;
+    border-radius: 7.7px;
+    font-family: monospace;
+    margin-top: 3px;
+}

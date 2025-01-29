@@ -1,0 +1,21 @@
+
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+body{
+    box-sizing: border-box;
+    padding: 20px;
+}
+.factura{
+    margin: 20px 0px;
+    box-sizing: border-box;
+    padding: 7px 10px;
+    box-shadow: 0px 0px 6px 1px gray;
+    border-radius: 8px;
+}
+.factura p{
+    font-family: monospace;
+    margin: 4px 0px;
+}
