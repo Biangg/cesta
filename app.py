@@ -183,4 +183,4 @@ def dcarro():
 
 
 if __name__ == '__main__':
-    app.run(debug = True, port = 80, host = '192.168.43.27')
+    app.run(debug = True, port = 1000)
