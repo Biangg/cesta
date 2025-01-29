@@ -3,16 +3,17 @@ import pymysql
 import pymysql.cursors
 import pandas as pd
 
-db_config = {
-    'host'          :   'localhost',
-    'user'          :   'nkuen',
-    'password'      :   'paquete',
-    'database'      :   'NKUEN',
-    'cursorclass'   :   pymysql.cursors.DictCursor
-}
+DB_HOST = os.getenv("DB_HOST", "postgresql://admin:ca0JZkCQyssnhLgzyUKi08Z5FdKt9ozf@dpg-cud4hvogph6c738lbpdg-a.oregon-postgres.render.com/nkuen")
+DB_USER = os.getenv("DB_USER", "admin")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "ca0JZkCQyssnhLgzyUKi08Z5FdKt9ozf")
+DB_NAME = os.getenv("DB_NAME", "nkuen")
 
 def get_connection():
-    return pymysql.connect(**db_config)
+    return pymysql.connect(host=DB_HOST,
+                           user=DB_USER,
+                           password=DB_PASSWORD,
+                           database=DB_NAME,
+                           cursorclass=pymysql.cursors.DictCursor)
 
 class Cargador:
     def principal(self):
