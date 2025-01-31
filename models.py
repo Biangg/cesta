@@ -7,7 +7,7 @@ import pandas as pd
 DB_HOST = os.getenv("DB_HOST", "db.aaayhwqxqyklufnvpqnj.supabase.co")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "[YOUR-PASSWORD]")  # Reemplaza con tu contraseña
+DB_PASSWORD = os.getenv("DB_PASSWORD", "admin@root1")  # Reemplaza con tu contraseña
 DB_NAME = os.getenv("DB_NAME", "postgres")
 
 # Función para obtener la conexión a PostgreSQL
