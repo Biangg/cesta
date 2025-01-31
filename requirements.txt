@@ -55,4 +55,5 @@ tomli==2.0.1
 tzdata==2024.1
 urllib3==2.2.2
 virtualenv==20.26.3
+psycopg2==2.9.2
 gunicorn==21.2.0
