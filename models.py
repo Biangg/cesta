@@ -20,87 +20,110 @@ def get_connection():
         database=DB_NAME
     )
 
+import os
+import psycopg2
+import pandas as pd
+
+# Configura las variables de entorno
+DB_HOST = os.getenv("DB_HOST", "dpg-cud4hvogph6c738lbpdg-a")
+DB_PORT = os.getenv("DB_PORT", "5432")
+DB_USER = os.getenv("DB_USER", "admin")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "tu_contraseña_segura")  # NO compartas esto públicamente
+DB_NAME = os.getenv("DB_NAME", "nkuen")
+
+# Función para obtener la conexión a PostgreSQL
+def get_connection():
+    return psycopg2.connect(
+        host=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME
+    )
+
 
 class Cargador:
     def principal(self):
-        conexion = get_connection()
+        """Obtiene todos los productos de la base de datos."""
         try:
-            with conexion.cursor() as cursor:
-                cursor.execute("SELECT * FROM productos")
-                productos = cursor.fetchall()
-        finally:
-            conexion.close()
-        return pd.DataFrame(productos)
-    
-    def buscador(dato):
-        conexion = get_connection()
+            with get_connection() as conexion:
+                with conexion.cursor() as cursor:
+                    cursor.execute("SELECT * FROM productos")
+                    productos = cursor.fetchall()
+                    columnas = [desc[0] for desc in cursor.description]  # Obtiene nombres de columnas
+            return pd.DataFrame(productos, columns=columnas)
+        except psycopg2.Error as e:
+            print(f"Error en la base de datos: {e}")
+            return pd.DataFrame()
+
+    def buscador(self, dato):
+        """Busca productos por nombre (evita inyección SQL)."""
         try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM productos WHERE nombre LIKE '%{dato}%' ")
-                datos = cursor.fetchall()
-        finally:
-            conexion.close()
-        return datos
-    
-    def filtrar(dato):
-        conexion = get_connection()
+            with get_connection() as conexion:
+                with conexion.cursor() as cursor:
+                    cursor.execute("SELECT * FROM productos WHERE nombre ILIKE %s", (f"%{dato}%",))
+                    datos = cursor.fetchall()
+                    columnas = [desc[0] for desc in cursor.description]
+            return pd.DataFrame(datos, columns=columnas)
+        except psycopg2.Error as e:
+            print(f"Error en la base de datos: {e}")
+            return pd.DataFrame()
+
+    def filtrar(self, id_categoria):
+        """Filtra productos por categoría."""
         try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM productos WHERE id_categoria = '{dato}' ")
-                datos = cursor.fetchall()
-        finally:
-            conexion.close()
-        return datos
-    
-    def det(id):
-        conexion = get_connection()
+            with get_connection() as conexion:
+                with conexion.cursor() as cursor:
+                    cursor.execute("SELECT * FROM productos WHERE id_categoria = %s", (id_categoria,))
+                    datos = cursor.fetchall()
+                    columnas = [desc[0] for desc in cursor.description]
+            return pd.DataFrame(datos, columns=columnas)
+        except psycopg2.Error as e:
+            print(f"Error en la base de datos: {e}")
+            return pd.DataFrame()
+
+    def det(self, id_producto):
+        """Obtiene detalles de un producto por ID."""
         try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM productos WHERE id_producto = '{id}' ")
-                datos = cursor.fetchall()
-        finally:
-            conexion.close()
-        return pd.DataFrame(datos)
+            with get_connection() as conexion:
+                with conexion.cursor() as cursor:
+                    cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id_producto,))
+                    datos = cursor.fetchall()
+                    columnas = [desc[0] for desc in cursor.description]
+            return pd.DataFrame(datos, columns=columnas)
+        except psycopg2.Error as e:
+            print(f"Error en la base de datos: {e}")
+            return pd.DataFrame()
+
 
 class Usuarios:
-    def insertar(self, nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion = '000,0', desc_ubicacion = 'no lo tengo claro'):
-        conexion = get_connection()
+    def insertar(self, nombre, apellidos, telefono, dip, password, ciudad, barrio, ubicacion="000,0", desc_ubicacion="No definido"):
+        """Inserta un nuevo usuario en la base de datos."""
         try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"INSERT INTO usuarios(nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion, desc_ubicacion) VALUES ('{nombre}', '{apellidos}', '{telefono}', '{dip}', '{password}', '{ciudad}', '{bario}', '{ubicacion}', '{desc_ubicacion}' )")
-                conexion.commit()
-        finally:
-            conexion.close()
+            with get_connection() as conexion:
+                with conexion.cursor() as cursor:
+                    cursor.execute(
+                        """INSERT INTO usuarios (nombre, apellidos, telefono, dip, password, ciudad, barrio, ubicacion, desc_ubicacion)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                        (nombre, apellidos, telefono, dip, password, ciudad, barrio, ubicacion, desc_ubicacion),
+                    )
+                    conexion.commit()
+        except psycopg2.Error as e:
+            print(f"Error en la base de datos: {e}")
 
-    def yo(telefono):
-        conexion = get_connection()
+    def yo(self, telefono):
+        """Obtiene la información de un usuario por su número de teléfono."""
         try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM usuarios WHERE telefono = '{telefono}' ")
-                yo = cursor.fetchall()
-        finally:
-            conexion.close()
-        return pd.DataFrame(yo)
+            with get_connection() as conexion:
+                with conexion.cursor() as cursor:
+                    cursor.execute("SELECT * FROM usuarios WHERE telefono = %s", (telefono,))
+                    usuario = cursor.fetchall()
+                    columnas = [desc[0] for desc in cursor.description]
+            return pd.DataFrame(usuario, columns=columnas)
+        except psycopg2.Error as e:
+            print(f"Error en la base de datos: {e}")
+            return pd.DataFrame()
 
-class Pedidos:
-    def simple(id_producto, id_cliente, fecha_pedido, precio, estado = 'pedido'):
-        conexion = get_connection()
-        try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"INSERT INTO pedidos(id_producto, id_cliente, fecha_pedido, precio, estado) VALUES ('{id_producto}', '{id_cliente}', '{fecha_pedido}', '{precio}', '{estado}')")
-                conexion.commit()
-        finally:
-            conexion.close()
-    def facturas(id):
-        conexion = get_connection()
-        try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM pedidos INNER JOIN productos ON pedidos.id_cliente = '{id}' and pedidos.id_producto = productos.id_producto")
-                facturas = cursor.fetchall()
-        finally:
-            conexion.close()
-        print(pd.DataFrame(facturas))
-        return pd.DataFrame(facturas)
 
 class Carro:
     def insertar(id_producto, precio, id_cliente):
