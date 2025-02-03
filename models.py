@@ -4,11 +4,11 @@ import psycopg2
 import pandas as pd
 
 # Configura las variables de entorno
-DB_HOST = os.getenv("DB_HOST", "db.aaayhwqxqyklufnvpqnj.supabase.co")
+DB_HOST = os.getenv("DB_HOST", "dpg-cud4hvogph6c738lbpdg-a")
 DB_PORT = os.getenv("DB_PORT", "5432")
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "admin@root1")  # Reemplaza con tu contraseña
-DB_NAME = os.getenv("DB_NAME", "postgres")
+DB_USER = os.getenv("DB_USER", "admin")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "ca0JZkCQyssnhLgzyUKi08Z5FdKt9ozf")  # Reemplaza con tu contraseña
+DB_NAME = os.getenv("DB_NAME", "nkuen")
 
 # Función para obtener la conexión a PostgreSQL
 def get_connection():
