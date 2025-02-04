@@ -1,20 +1,25 @@
-
-import pymysql
-import pymysql.cursors
-import pandas as pd
 import datetime as dt
+import os
+import psycopg2
+import pandas as pd
 
-db_config = {
-    'host'          :   'localhost',
-    'user'          :   'nkuen',
-    'password'      :   'paquete',
-    'database'      :   'NKUEN',
-    'cursorclass'   :   pymysql.cursors.DictCursor
-}
+# Configura las variables de entorno
+DB_HOST = os.getenv("DB_HOST", "dpg-cud4hvogph6c738lbpdg-a")
+DB_PORT = os.getenv("DB_PORT", "5432")
+DB_USER = os.getenv("DB_USER", "admin")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "tu_contraseña_segura")  # NO compartas esto públicamente
+DB_NAME = os.getenv("DB_NAME", "nkuen")
 
+# Función para obtener la conexión a PostgreSQL
 def get_connection():
-    return pymysql.connect(**db_config)
-
+    return psycopg2.connect(
+        host=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME
+    )
+    
 class Cargador:
     def principal(self):
         conexion = get_connection()
