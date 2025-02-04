@@ -37,11 +37,11 @@ body
     font-family: monospace;
 }
 .portada button{
-    padding: 10px;
+    padding: 20px 10px;
     border: 0px solid white;
     background-color: blue;
     color: white;
-    border-radius: 8px;
+    border-radius: 10px;
     margin-top: 20px;
     cursor: pointer;
     width: 100%;

@@ -2,15 +2,16 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/init.css') }}">
  <div class="portada">
-    <h1>Cheap</h1>
+    <h1>Cesta</h1>
     <div class="formulario">
         <p>
             <b>Una opccion simple y segura para realizar tus compras desde casa.</b><br><br>
-            Estamos aqui para ayudaete a incrementar exponencialmente tu negocio
-            acercandote a tus clienes mas fieles.
+            Busca productos en mas de 40 tiendas diferentes desde casa de una 
+            forma rapida y segura.
         </p>
         <script src="{{ url_for('static', filename='js/jquery-3.6.4.min.js' ) }}"></script>
         <p style="margin-top: 27vh;">toca aceptar y continuar para aceptar nuestros <a href="">terminos y condiciones</a></p>
-        <a href="/login"><button type="button"> aceptar y continuar </button></a>
+        <div style="display: flex; width: 100%; justify-content: center; align-items: center;">
+            <a style="width: 100%;" href="/login"><button type="button"> aceptar y continuar </button></a></div>
     </div>
  </div>

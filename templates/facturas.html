@@ -9,7 +9,7 @@
 <body>
     <h1>Compras</h1>
     <p style="font-family: monospace;">
-        {% for i in facturas['id_producto'] %}
+        {% for i in facturas['id_pedido'] %}
             <div class="factura">
                 <h4>{{ facturas['fecha_pedido'][i-1] }}</h4>
                 <p>{{ facturas['nombre'][i-1] }} <b style="background-color: rgb(202, 202, 202); box-sizing: border-box;
