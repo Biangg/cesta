@@ -19,8 +19,8 @@ app.config['SECRET_KEY'] = 'APOCALIPTO'
 
 @app.route('/')
 def init():
-    if 'usr' in session:
-        print(session['usr'])
+    if 'telefono' in session:
+        print(session['telefono'])
     return render_template('init.html')
 
 @app.route('/yo')
