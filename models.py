@@ -4,21 +4,12 @@ import psycopg2
 import pandas as pd
 
 # Configura las variables de entorno
-DB_HOST = os.getenv("DB_HOST", "dpg-cud4hvogph6c738lbpdg-a")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_USER = os.getenv("DB_USER", "admin")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "tu_contraseña_segura")  # NO compartas esto públicamente
-DB_NAME = os.getenv("DB_NAME", "nkuen")
+URL = os.getenv("URL", "postgresql://admin:ca0JZkCQyssnhLgzyUKi08Z5FdKt9ozf@dpg-cud4hvogph6c738lbpdg-a.oregon-postgres.render.com/nkuen")
 
 # Función para obtener la conexión a PostgreSQL
 def get_connection():
-    return psycopg2.connect(
-        host=DB_HOST,
-        port=DB_PORT,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        database=DB_NAME
-    )
+    conn = psycopg2.connect(URL)
+    return conn 
     
 class Cargador:
     def principal(self):
