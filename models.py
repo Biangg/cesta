@@ -4,7 +4,7 @@ import psycopg2
 import pandas as pd
 
 # Configura las variables de entorno
-URL = "postgresql://admin:ca0JZkCQyssnhLgzyUKi08Z5FdKt9ozf@dpg-cud4hvogph6c738lbpdg-a.oregon-postgres.render.com/nkuen"
+URL = "postgresql://postgres.aaayhwqxqyklufnvpqnj:#Admin_root0@aws-0-us-west-1.pooler.supabase.com:6543/postgres"
 
 # Función para obtener la conexión a PostgreSQL
 def get_connection():
