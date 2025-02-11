@@ -72,13 +72,8 @@ class Usuarios:
                 yo = cursor.fetchall()
         finally:
             conexion.close()
+        return(yo)
         
-        # Retornar un DataFrame vacío si no se encuentra el usuario
-        if yo:
-            return pd.DataFrame(yo, columns=['id', 'nombre', 'apellidos', 'telefono', 'dip', 'password', 'ciudad', 'bario', 'ubicacion', 'desc_ubicacion'])
-        else:
-            return pd.DataFrame(columns=['id', 'nombre', 'apellidos', 'telefono', 'dip', 'password', 'ciudad', 'bario', 'ubicacion', 'desc_ubicacion'])
-
 class Pedidos:
     def simple(self, id_producto, id_cliente, precio, estado='pedido'):
         fecha = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Aseguramos que la fecha esté en el formato correcto
