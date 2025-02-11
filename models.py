@@ -1,6 +1,8 @@
+
 import datetime as dt
 import psycopg2
 import pandas as pd
+
 
 # Configura las variables de entorno
 URL = "postgresql://postgres.aaayhwqxqyklufnvpqnj:#Admin_root0@aws-0-us-west-1.pooler.supabase.com:6543/postgres"
@@ -16,40 +18,44 @@ class Cargador:
         try:
             with conexion.cursor() as cursor:
                 cursor.execute("SELECT * FROM productos")
+                columns = [desc[0] for desc in cursor.description]
                 productos = cursor.fetchall()
         finally:
             conexion.close()
-        return pd.DataFrame(productos)
+        return pd.DataFrame(productos, columns = columns)
     
     def buscador(self, dato):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
                 cursor.execute("SELECT * FROM productos WHERE nombre LIKE %s", ('%' + dato + '%',))
+                columns = [desc[0] for desc in cursor.description]
                 datos = cursor.fetchall()
         finally:
             conexion.close()
-        return datos
+        return pd.DataFrame(datos, columns = columns)
     
     def filtrar(self, dato):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
                 cursor.execute("SELECT * FROM productos WHERE id_categoria = %s", (dato,))
+                columns = [desc[0] for desc in cursor.description]
                 datos = cursor.fetchall()
         finally:
             conexion.close()
-        return datos
+        return pd.DataFrame(datos, columns = columns)
     
     def det(self, id):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
                 cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
+                columns = [desc[0] for desc in cursor.description]
                 datos = cursor.fetchall()
         finally:
             conexion.close()
-        return pd.DataFrame(datos)
+        return pd.DataFrame(datos, columns = columns)
 
 class Usuarios:
     def insertar(self, nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion='000,0', des_ubicacion='no lo tengo claro'):
@@ -69,11 +75,14 @@ class Usuarios:
         try:
             with conexion.cursor() as cursor:
                 cursor.execute("SELECT * FROM usuarios WHERE telefono = %s", (telefono,))
+                columns = [desc[0] for desc in cursor.description]
                 yo = cursor.fetchall()
         finally:
             conexion.close()
-        return(yo)
         
+        # Retornar un DataFrame vacío si no se encuentra el usuario
+        return pd.DataFrame(yo, columns = columns)
+
 class Pedidos:
     def simple(self, id_producto, id_cliente, precio, estado='pedido'):
         fecha = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Aseguramos que la fecha esté en el formato correcto
@@ -88,7 +97,7 @@ class Pedidos:
         finally:
             conexion.close()
 
-    def facturas(self, id):
+    def facturas(id):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
@@ -97,11 +106,12 @@ class Pedidos:
                     INNER JOIN productos ON pedidos.id_producto = productos.id_producto
                     WHERE pedidos.id_cliente = %s
                 """, (id,))
+                columns = [desc[0] for desc in cursor.description]
                 facturas = cursor.fetchall()
         finally:
             conexion.close()
         
-        return pd.DataFrame(facturas)
+        return pd.DataFrame(facturas, columns = columns)
 
 class Carro:
     def insertar(self, id_producto, precio, id_cliente):
@@ -120,7 +130,7 @@ class Carro:
         # Este método es similar a insertar, por lo que lo unificamos con insertar
         self.insertar(id_producto, precio, id_cliente)
 
-    def cargar(self, id_usuario):
+    def cargar( id_usuario):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
@@ -130,11 +140,12 @@ class Carro:
                     INNER JOIN productos ON carro.id_producto = productos.id_producto
                     WHERE carro.id_usuario = %s
                 """, (id_usuario,))
+                columns = [desc[0] for desc in cursor.description]
                 productos = cursor.fetchall()
         finally:
             conexion.close()
         
-        return pd.DataFrame(productos)
+        return pd.DataFrame(productos, columns = columns)
 
     def eliminar(self, id_producto):
         conexion = get_connection()
