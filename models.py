@@ -1,5 +1,4 @@
 import datetime as dt
-import os
 import psycopg2
 import pandas as pd
 
@@ -10,7 +9,7 @@ URL = "postgresql://postgres.aaayhwqxqyklufnvpqnj:#Admin_root0@aws-0-us-west-1.p
 def get_connection():
     conn = psycopg2.connect(URL)
     return conn 
-    
+
 class Cargador:
     def principal(self):
         conexion = get_connection()
@@ -22,116 +21,140 @@ class Cargador:
             conexion.close()
         return pd.DataFrame(productos)
     
-    def buscador(dato):
+    def buscador(self, dato):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM productos WHERE nombre LIKE '%{dato}%' ")
+                cursor.execute("SELECT * FROM productos WHERE nombre LIKE %s", ('%' + dato + '%',))
                 datos = cursor.fetchall()
         finally:
             conexion.close()
         return datos
     
-    def filtrar(dato):
+    def filtrar(self, dato):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM productos WHERE id_categoria = '{dato}' ")
+                cursor.execute("SELECT * FROM productos WHERE id_categoria = %s", (dato,))
                 datos = cursor.fetchall()
         finally:
             conexion.close()
         return datos
     
-    def det(id):
+    def det(self, id):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM productos WHERE id_producto = '{id}' ")
+                cursor.execute("SELECT * FROM productos WHERE id_producto = %s", (id,))
                 datos = cursor.fetchall()
         finally:
             conexion.close()
         return pd.DataFrame(datos)
 
 class Usuarios:
-    def insertar(self, nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion = '000,0', desc_ubicacion = 'no lo tengo claro'):
+    def insertar(self, nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion='000,0', des_ubicacion='no lo tengo claro'):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"INSERT INTO usuarios(nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion, desc_ubicacion) VALUES ('{nombre}', '{apellidos}', '{telefono}', '{dip}', '{password}', '{ciudad}', '{bario}', '{ubicacion}', '{desc_ubicacion}' )")
+                cursor.execute("""
+                    INSERT INTO usuarios (nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion, desc_ubicacion)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """, (nombre, apellidos, telefono, dip, password, ciudad, bario, ubicacion, des_ubicacion))
                 conexion.commit()
         finally:
             conexion.close()
 
-    def yo(telefono):
+    def yo( telefono):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM usuarios WHERE telefono = '{telefono}' ")
+                cursor.execute("SELECT * FROM usuarios WHERE telefono = %s", (telefono,))
                 yo = cursor.fetchall()
         finally:
             conexion.close()
-        return pd.DataFrame(yo)
+        
+        # Retornar un DataFrame vacío si no se encuentra el usuario
+        if yo:
+            return pd.DataFrame(yo, columns=['id', 'nombre', 'apellidos', 'telefono', 'dip', 'password', 'ciudad', 'bario', 'ubicacion', 'desc_ubicacion'])
+        else:
+            return pd.DataFrame(columns=['id', 'nombre', 'apellidos', 'telefono', 'dip', 'password', 'ciudad', 'bario', 'ubicacion', 'desc_ubicacion'])
 
 class Pedidos:
-    def simple(id_producto, id_cliente, fecha_pedido, precio, estado = 'pedido'):
-        fecha = dt.datetime.now()
+    def simple(self, id_producto, id_cliente, precio, estado='pedido'):
+        fecha = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Aseguramos que la fecha esté en el formato correcto
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"INSERT INTO pedidos(id_producto, id_cliente, fecha_pedido, precio, estado) VALUES ('{id_producto}', '{id_cliente}', '{fecha}', '{precio}', '{estado}')")
+                cursor.execute("""
+                    INSERT INTO pedidos (id_producto, id_cliente, fecha_pedido, precio, estado)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (id_producto, id_cliente, fecha, precio, estado))
                 conexion.commit()
         finally:
             conexion.close()
-    def facturas(id):
+
+    def facturas(self, id):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM pedidos INNER JOIN productos ON pedidos.id_cliente = '{id}' and pedidos.id_producto = productos.id_producto")
+                cursor.execute("""
+                    SELECT * FROM pedidos
+                    INNER JOIN productos ON pedidos.id_producto = productos.id_producto
+                    WHERE pedidos.id_cliente = %s
+                """, (id,))
                 facturas = cursor.fetchall()
         finally:
             conexion.close()
-        print(pd.DataFrame(facturas))
+        
         return pd.DataFrame(facturas)
 
 class Carro:
-    def insertar(id_producto, precio, id_cliente):
+    def insertar(self, id_producto, precio, id_cliente):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"INSERT INTO carro(id_producto, precio, id_usuario) VALUES ('{id_producto}', '{precio}', '{id_cliente}')")
+                cursor.execute("""
+                    INSERT INTO carro (id_producto, precio, id_usuario)
+                    VALUES (%s, %s, %s)
+                """, (id_producto, precio, id_cliente))
                 conexion.commit()
         finally:
             conexion.close()
-    def comprar(id_cliente):
+
+    def comprar(self, id_producto, precio, id_cliente):
+        # Este método es similar a insertar, por lo que lo unificamos con insertar
+        self.insertar(id_producto, precio, id_cliente)
+
+    def cargar(self, id_usuario):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"INSERT INTO carro(id_producto, precio, id_usuario) VALUES ('{id_producto}', '{precio}', '{id_cliente}')")
-                conexion.commit()
-        finally:
-            conexion.close()
-    def cargar(id_usuario):
-        conexion = get_connection()
-        try:
-            with conexion.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM carro INNER JOIN productos ON carro.id_producto = productos.id_producto ")
+                cursor.execute("""
+                    SELECT productos.nombre, productos.precio
+                    FROM carro
+                    INNER JOIN productos ON carro.id_producto = productos.id_producto
+                    WHERE carro.id_usuario = %s
+                """, (id_usuario,))
                 productos = cursor.fetchall()
         finally:
             conexion.close()
+        
         return pd.DataFrame(productos)
-    def eliminar(id_producto):
+
+    def eliminar(self, id_producto):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"DELETE FROM carro WHERE id_producto = '{id_producto}' ")
+                cursor.execute("DELETE FROM carro WHERE id_producto = %s", (id_producto,))
                 conexion.commit()
         finally:
             conexion.close()
-    def limpiar(id_usuario):
+
+    def limpiar(self, id_usuario):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute(f"DELETE FROM carro WHERE id_usuario = '{id_usuario}' ")
+                cursor.execute("DELETE FROM carro WHERE id_usuario = %s", (id_usuario,))
                 conexion.commit()
         finally:
             conexion.close()
