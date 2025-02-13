@@ -1,21 +1,42 @@
 
+
+#                   (c)   Biangg   -  en  este  archivo  se  encuentran  las  rutas 
+#                   de toda la aplicacion, en el arcmodelshivo api.py se encuentran
+#                   las   rutas   para   realizar   peticiones  desde  el  exterior 
+#                   todos   los   datos  estan  protegidos  por  sifrado  extremado
+#
+#                   codigo   escrito   por  primeravez  por  O. Obiang OBIANG NZANG
+
+
+#   introduccion la las libreria utilizadas
+#   Flask ==> backend
+#   session ==> sesiones y cookies
+#   jsonify ==> json para js
+#   render_template, make_response ==> renderizar plantillas HTML5
+
 from flask import Flask, session, jsonify, render_template, request, make_response
 import datetime as dt
 import json
+#   pandas ==> manejo de datos en forma de oaneles
 import pandas as pd
 import models
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'APOCALIPTO'
 
-# Ruta inicial
+
+# Ruta inicial splash
 @app.route('/')
 def init():
-    if 'usr' in session:
-        print(session['usr'])
+    if 'password' in session and 'telefono' in session:
+        yo = models.Usuarios.yo(session['telefono'])
+        cargador = models.Cargador()
+        productos = cargador.principal()
+        categoria = ['Electronica', 'Higiene', 'Ropas', 'Electricidad', 'Educacion', 'Decoracion']
+        return make_response(render_template('index.html', productos=productos, yo=yo, categoria=categoria))
     return render_template('init.html')
 
-# Ruta de la página "yo"
+# Ruta de la página del perfil "yo"
 @app.route('/yo')
 def yo():
     if 'password' in session and 'telefono' in session:
@@ -45,9 +66,10 @@ def login():
             password = request.form["clave"]
             ciudad = request.form["ciudad"]
             bario = request.form["bario"]
-            usuario.insertar(nombre, apellidos, telefono, dip, password, ciudad, bario)
+            yo = models.Usuarios.yo(telefono)
+            if yo.empty:
+                usuario.insertar(nombre, apellidos, telefono, dip, password, ciudad, bario)
         finally:
-            print(request.form)
             session["telefono"] = telefono
             session["password"] = password
             response = {'status': 200, 'usuario': nombre}
@@ -55,7 +77,6 @@ def login():
 
     if 'password' in session and 'telefono' in session:
         yo = models.Usuarios.yo(session['telefono'])
-        print(yo)
         modelo = models.Cargador()
         productos = modelo.principal()
         categoria = ['Electronica', 'Higiene', 'Ropas', 'Electricidad', 'Educacion', 'Decoracion']
@@ -87,7 +108,6 @@ def carro():
 
     yo = models.Usuarios.yo(session['telefono'])
     productos = models.Carro.cargar(int(yo['id_usuario'][0]))
-    print(productos)
     total = sum([float(p) for p in productos['precio']])
     return make_response(render_template('carro.html', productos=productos, yo=yo, total=total))
 
@@ -98,6 +118,8 @@ def index():
         return make_response(render_template('login.html'))
     
     yo = models.Usuarios.yo(session['telefono'])
+    if yo.empty:
+        return make_response(render_template('login.html'))
     if request.method == 'POST':
         estado = request.form['estado']
         id_producto = int(request.form['id_producto'])
@@ -115,15 +137,18 @@ def index():
 # Ruta de búsqueda
 @app.route('/buscar', methods=['POST', 'GET'])
 def buscar():
+    if 'password' not in session and 'telefono' not in session:
+        return make_response(render_template('login.html'))
     tabla = pd.DataFrame()
     if request.method == 'POST':
         dato = str(request.form['dato'])
         resultado = models.Cargador.buscador(dato)
-        tabla = resultado
-        print(resultado)
-        return jsonify(resultado)
+        tabla = json.loads(resultado.to_json(orient='records'))
+        return jsonify(tabla)
     
     yo = models.Usuarios.yo(session['telefono'])
+    if yo.empty:
+        return make_response(render_template('login.html'))
     categoria = ['Electronica', 'Higiene', 'Ropas', 'Electricidad', 'Educacion', 'Decoracion']
     return make_response(render_template('buscar.html', yo=yo, tabla=tabla, categoria=categoria))
 
@@ -135,9 +160,8 @@ def f():
         dato = str(request.form['dato'])
         categoria = ['Electronica', 'Higiene', 'Ropas', 'Electricidad', 'Educacion', 'Decoracion']
         resultado = models.Cargador.filtrar(categoria.index(dato))
-        tabla = resultado
-        print(resultado)
-        return jsonify(resultado)
+        tabla = json.loads(resultado.to_json(orient='records'))
+        return jsonify(tabla)
 
 # Ruta para un elemento específico
 @app.route('/buscar/<id>', methods=['POST', 'GET'])
@@ -146,7 +170,10 @@ def elemento(id):
     telefono = session['telefono']
     yo = models.Usuarios.yo(telefono)
     datos = models.Cargador.det(idl)
-    return make_response(render_template('elemento.html', datos=datos, yo=yo))
+    cat = datos['id_categoria'][0]
+    productos = models.Cargador.filtrar(cat)
+    categoria = ['Electronica', 'Higiene', 'Ropas', 'Electricidad', 'Educacion', 'Decoracion']
+    return make_response(render_template('elemento.html', datos=datos, yo=yo, productos = productos, categoria = categoria))
 
 # Ruta de prueba para verificar si un usuario existe
 @app.route('/usr_test', methods=['POST'])
@@ -184,4 +211,4 @@ def dcarro():
         return json.dumps({'estado': 1})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=80, host = "192.168.43.27")

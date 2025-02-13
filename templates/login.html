@@ -54,7 +54,7 @@ color: white; border-radius: 4px; font-family: sans-serif;">C</b>estas</h2>
         <button style="float: right;" type="button" id="btnEntrar" >Entrar</button>
       </div>
 
-      <p id="alerta" style="font-family: monospace; color: red;"></p>
+      <p id="alerta" style="font-family: monospace; color: rgb(117, 117, 117); font-family: monospace;" >&copy; Biangg inc.</p>
     </form>
     </div>
 </div>
@@ -98,10 +98,12 @@ $(document).ready(function(){
 
 
     siguiente.addEventListener("click", function(){
-        if( !telefono.value){
-            alerta.textContent = "revise el numero de telefono";
+        if( !telefono.value || telefono.value.length != 9 ){
+            alerta.style.color = 'red'
+            alerta.textContent = "> revise el numero de telefono";
         }
         else{
+            alerta.textContent = "";
             $.ajax({
             url : '/usr_test',
             data : $('form').serialize(),
@@ -121,23 +123,25 @@ $(document).ready(function(){
     })
 
     siguiente1.addEventListener("click", function(){
-        if( !nombre.value){
-            alerta.textContent = "revise el nombre";
+        if( !nombre.value || nombre.value.length < 2){
+            alerta.textContent = "> revise el nombre";
         }
-        else if( !apellidos.value){
-            alerta.textContent = "revise los apellidos";
+        else if( !apellidos.value || apellidos.value.length < 5){
+            alerta.textContent = "> revise los apellidos";
         }
-        else if( !dip.value){
-            alerta.textContent = "introduca un DIP valido";
+        else if( !dip.value || dip.value.length != 9){
+            alerta.textContent = "> este Dip no es valido";
         }
-        etapa1.style.display = "none";
+        else{
+            etapa1.style.display = "none";
         etapa2.style.display = "none";
         etapa3.style.display = "block";
+        }
     })
 
     
     btnCreate.addEventListener("click", function(){ 
-        if( !clave.value){
+        if( !clave.value || clave.value.length < 3 ){
                 alerta.textContent = "introdusca una contrasena valda";
             }
         else if(  clave.value != nclave.value){

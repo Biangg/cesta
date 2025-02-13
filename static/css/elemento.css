@@ -27,15 +27,72 @@
 }
 #btn_comprar{
     box-sizing: border-box;
-    width: 90%;
+    width: 70%;
+    margin-right: 10px;
     background-color: rgb(9, 167, 9);
     padding: 15px 0px;
     border: 0px solid wheat;
     border-radius: 10px;
-    position: fixed;
-    bottom: 10px;
     z-index: 4;
 }
-.inferior{
-    display: none;
+#btn_coment{
+    box-sizing: border-box;
+    width: 10%;
+    padding: 0px 5px;
+    margin-right: 10px;
+    background-color: rgb(255, 255, 255);
+    padding: 15px 0px;
+    border: 0px solid black;
+    border-radius: 10px;
+    z-index: 4;
+}
+
+
+.productos{
+    margin: 0 auto;
+    max-width: 100%;
+    column-count: 2;
+    column-gap: 10px;
+    margin-bottom: 80px;
+}
+
+.targeta{
+    width: 100%;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 15px;
+    margin: 15px 0px;
+    break-inside: avoid;
+    box-shadow: 0px 0px 3px 1px rgb(214, 214, 214);
+}
+.targeta .portada {
+    width: 100%;
+    border: 0px solid white;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.portada img{
+    max-width: 100%;
+}
+.targeta .tg_inf{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 3px 0px;
+}
+.tg_inf button{
+    box-sizing: border-box;
+    padding: 3px;
+    margin: 0px 2px;
+    font-size: 9px;
+    cursor: pointer;
+    width: 20px;
+    border: 0px solid white;
+    background-color: rgb(255, 255, 255);
+    border-radius: 3px;
+    color: white;
+    font-family: monospace;
+    background-size: 100%;
 }

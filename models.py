@@ -2,14 +2,25 @@
 import datetime as dt
 import psycopg2
 import pandas as pd
+import pymysql
+import pymysql.cursors
 
 
 # Configura las variables de entorno
 URL = "postgresql://postgres.aaayhwqxqyklufnvpqnj:#Admin_root0@aws-0-us-west-1.pooler.supabase.com:6543/postgres"
 
+db_config = {
+    'host' : 'localhost',
+    'user' : 'nkuen',
+    'password' : '',
+    'database' : 'NKUEN',
+    'cursorclass' : pymysql.cursors.DictCursor
+}
+
 # Función para obtener la conexión a PostgreSQL
 def get_connection():
-    conn = psycopg2.connect(URL)
+    #conn = psycopg2.connect(URL)
+    conn = pymysql.connect(**db_config)
     return conn 
 
 class Cargador:
@@ -24,18 +35,18 @@ class Cargador:
             conexion.close()
         return pd.DataFrame(productos, columns = columns)
     
-    def buscador(self, dato):
+    def buscador( dato):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
-                cursor.execute("SELECT * FROM productos WHERE nombre LIKE %s", ('%' + dato + '%',))
+                cursor.execute("SELECT * FROM productos WHERE nombre LIKE %s", ( dato + '%',))
                 columns = [desc[0] for desc in cursor.description]
                 datos = cursor.fetchall()
         finally:
             conexion.close()
         return pd.DataFrame(datos, columns = columns)
     
-    def filtrar(self, dato):
+    def filtrar( dato):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
@@ -46,7 +57,7 @@ class Cargador:
             conexion.close()
         return pd.DataFrame(datos, columns = columns)
     
-    def det(self, id):
+    def det( id):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
@@ -92,7 +103,7 @@ class Pedidos:
                 cursor.execute("""
                     INSERT INTO pedidos (id_producto, id_cliente, fecha_pedido, precio, estado)
                     VALUES (%s, %s, %s, %s, %s)
-                """, (id_producto, id_cliente, fecha, precio, estado))
+                """, (int(id_producto), int(id_cliente), fecha, precio, estado))
                 conexion.commit()
         finally:
             conexion.close()
@@ -114,7 +125,7 @@ class Pedidos:
         return pd.DataFrame(facturas, columns = columns)
 
 class Carro:
-    def insertar(self, id_producto, precio, id_cliente):
+    def insertar(id_producto, precio, id_cliente):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
@@ -135,7 +146,7 @@ class Carro:
         try:
             with conexion.cursor() as cursor:
                 cursor.execute("""
-                    SELECT productos.nombre, productos.precio
+                    SELECT productos.nombre, productos.precio, productos.id_producto
                     FROM carro
                     INNER JOIN productos ON carro.id_producto = productos.id_producto
                     WHERE carro.id_usuario = %s
@@ -147,7 +158,7 @@ class Carro:
         
         return pd.DataFrame(productos, columns = columns)
 
-    def eliminar(self, id_producto):
+    def eliminar(id_producto):
         conexion = get_connection()
         try:
             with conexion.cursor() as cursor:
