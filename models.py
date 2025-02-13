@@ -2,7 +2,7 @@
 import datetime as dt
 import psycopg2
 import pandas as pd
-import pymysql
+#import pymysql
 import pymysql.cursors
 
 
@@ -19,8 +19,8 @@ db_config = {
 
 # Función para obtener la conexión a PostgreSQL
 def get_connection():
-    #conn = psycopg2.connect(URL)
-    conn = pymysql.connect(**db_config)
+    conn = psycopg2.connect(URL)
+    #conn = pymysql.connect(**db_config)
     return conn 
 
 class Cargador:
